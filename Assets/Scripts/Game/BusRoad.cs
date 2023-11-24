@@ -59,6 +59,10 @@ public class BusRoad : MonoBehaviour
             //Передвижение до остановки
             Vector3 destination = _points[currentIndex].position;
             Vector3 lastPosition = bus.position;
+
+            Vector2 difference = destination - bus.position;
+            float angle = Mathf.Atan2(difference.y, difference.x) * Mathf.Rad2Deg - 90;
+            bus.localRotation = Quaternion.Euler(new Vector3(0, 0, angle));
             
             for(float i = 0; i < _rideTime; i += Time.deltaTime) 
             {

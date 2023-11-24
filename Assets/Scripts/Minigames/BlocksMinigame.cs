@@ -34,6 +34,9 @@ public class BlocksMinigame : Minigame
 
     public override void StartGame()
     {
+        if(_currentBlock != null)
+            Destroy(_currentBlock);
+
         base.StartGame();
         _trigger.enabled = true;
         StartCoroutine(Drag());
@@ -56,7 +59,6 @@ public class BlocksMinigame : Minigame
         base.FinishMinigame();
 
         _trigger.enabled = false;
-        Destroy(_currentBlock);
         Instantiate(_effect, _grabJoint.position, Quaternion.identity);
     }
 

@@ -1,6 +1,7 @@
 using UnityEngine;
 using TMPro;
 using System.Collections;
+using UnityEngine.UI;
 
 public abstract class Minigame : MonoBehaviour{
 	[Header("Общие параметры миниигры")]
@@ -12,8 +13,9 @@ public abstract class Minigame : MonoBehaviour{
 	//Эффект окончания миниигры
 	[SerializeField] protected GameObject _winEffect;
 
-	//Задняя панелька
+	//Задние панельки
 	[SerializeField] private CanvasGroup _panelGroup;
+	[SerializeField] private Image _backgroundTimer;
 
 	//Попап
 	[SerializeField] private GameObject _popup;
@@ -54,6 +56,8 @@ public abstract class Minigame : MonoBehaviour{
 		_collectedTickets = 0;
         _ticketsPrizeText.text = $"Собрано: 0";
 
+		_backgroundTimer.fillAmount = 1;
+
         _animator.SetTrigger("Show");
 		StartCoroutine(DisableAnimator());
 		StartCoroutine(CountTime());
@@ -73,9 +77,10 @@ public abstract class Minigame : MonoBehaviour{
 	}
 
 	IEnumerator CountTime(){
-		for(int i = _minigameTime; i >= 1; i -= 1){
-			_timer.text = $"Время: {i}";
-			yield return new WaitForSeconds(1);
+		for(float i = _minigameTime; i >= 0; i -= Time.deltaTime){
+			_timer.text = $"Время: {Mathf.FloorToInt(i)}";
+			_backgroundTimer.fillAmount = i/_minigameTime;
+			yield return new WaitForEndOfFrame();
 		}
 
 		FinishMinigame();
